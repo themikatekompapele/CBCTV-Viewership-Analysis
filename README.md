@@ -12,7 +12,7 @@ This project takes a deep dive into the patterns and trends of CBCTV viewership 
 - Duration of viewership
 - Program/Channel Performance
 
-# Tech Stack
+## 🛠️ Tech Stack
 - SQL (Databricks)
 - MS Excel
 - Google Looker Studio/PowerBI
