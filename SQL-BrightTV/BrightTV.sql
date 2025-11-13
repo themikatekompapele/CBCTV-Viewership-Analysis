@@ -3,7 +3,7 @@ SELECT * FROM user_profiles;
 SELECT * FROM viewership;
 
 
--- General checks
+-- Query to obtain an overview of data
 
 SELECT 
     MIN(age),
@@ -17,7 +17,7 @@ SELECT
 FROM viewership;
 
 
--- Checking number of records
+-- Query to count the number of records
 
 SELECT COUNT(*)
 FROM user_profiles;
@@ -33,7 +33,7 @@ FROM viewership;
 
 
 
--- Checking for completely duplicates rows
+-- Query to check for completely duplicates rows
 
 SELECT *, 
     COUNT(*)
@@ -49,7 +49,7 @@ HAVING COUNT(*) > 1; --(5 recodrs have duplicates)
 
 
 
--- Creating a temporary table with no duplicates as viewership_new
+-- Query to create a temporary table with no duplicates as viewership_new
 
 SELECT DISTINCT *
 FROM viewership;
@@ -70,7 +70,7 @@ FROM viewership_new;
 
 
 
--- Checking for missing values in the tables
+-- Query to check for missing values in the tables
 
 SELECT * FROM user_profiles
 WHERE userid IS NULL OR NAME IS NULL OR surname IS NULL OR email IS NULL OR gender IS NULL OR RACE IS NULL OR AGE IS NULL OR PROVINCE IS NULL OR SOCIAL_MEDIA_HANDLE IS NULL;
@@ -80,7 +80,7 @@ WHERE userid IS NULL OR channel2 IS NULL OR recorddate2 IS NULL OR duration_2 IS
 
 
 
--- Replacing missing records with 'None' and creating a temp table
+-- Query to replace missing records with 'None' and creating a temp table
 
 CREATE OR REPLACE TEMP TABLE user_profiles_new AS (
     SELECT 
@@ -105,7 +105,7 @@ CREATE OR REPLACE TEMP TABLE user_profiles_new AS (
 
 
 
--- Display users who have watched something, including the channels watched and the time of day.
+-- Query to retrieve data on and display users who have watched something, including the channels watched and the time of day.
 
 
 SELECT
@@ -138,7 +138,7 @@ INNER JOIN viewership_new AS v ON u.userid = v.userid;
 
 
 
--- Display the users and viewership per channel
+-- Query to retrieve data on and display the users and viewership per channel
 
 SELECT
     v.channel2 AS Channel,
@@ -150,7 +150,7 @@ ORDER BY user_count DESC;
 
 
 
--- Display the users and viewership per province
+-- Query to retrieve data on and display the users and viewership per province
 
 SELECT
     u.province,
@@ -162,7 +162,7 @@ ORDER BY user_count DESC;
 
 
 
--- Display the users and viewership per race
+-- Query to retrieve data on and display the users and viewership per race
 
 SELECT
     u.race,
@@ -174,7 +174,7 @@ ORDER BY user_count DESC;
 
 
 
--- Display the count of users and viewership per time of day
+-- Query to retrieve data on and display the count of users and viewership per time of day
 
 SELECT
     CASE
@@ -190,7 +190,7 @@ GROUP BY 1;
 
 
 
--- Display the count of users and viewership per duration
+-- Query to retrieve data on and display the count of users and viewership per duration
 
 SELECT
     CASE
@@ -206,7 +206,7 @@ GROUP BY 1;
 
 
 
--- Display the average duration per channel
+-- Query to retrieve data on and display the average duration per channel
 
 -- SELECT
 --     v.channel2 AS channel,
@@ -217,7 +217,7 @@ GROUP BY 1;
 
 
 
--- Display the count of users and viewership per age group
+-- Query to retrieve data on and display the count of users and viewership per age group
 
 SELECT
     Age_group,
@@ -228,7 +228,7 @@ GROUP BY 1;
 
 
 
--- Display the count of users and viewership per gender
+-- Query to retrieve data on and display the count of users and viewership per gender
 
 SELECT
     gender,
@@ -239,7 +239,7 @@ GROUP BY 1;
 
 
 
--- Display the count of users and viewership by month
+-- Query to retrieve data on and display the count of users and viewership by month
 
 SELECT
     month,
@@ -249,7 +249,7 @@ INNER JOIN viewership_new AS v ON u.userid = v.userid
 GROUP BY 1;
 
 
--- Display the count of users and viewership by Day
+-- Query to retrieve data on and display the count of users and viewership by Day
 
 SELECT
     Day,
