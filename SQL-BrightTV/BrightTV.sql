@@ -1,15 +1,16 @@
+-- Query to obtain an overview of data
 SELECT * FROM user_profiles;
 
 SELECT * FROM viewership;
 
 
--- Query to obtain an overview of data
+-- Query to obtain an youngest and oldest viewer age
 
 SELECT 
     MIN(age),
     MAX(age)
 FROM user_profiles;
-
+--Query to view earliest and latest viewing time
 SELECT 
     MIN(LOCAL_TIMESTAMP),
     MAX(LOCAL_TIMESTAMP),
@@ -28,7 +29,7 @@ FROM user_profiles;
 SELECT COUNT(*)
 FROM viewership;
 
-SELECT COUNT(userid)
+SELECT COUNT(user_id)
 FROM viewership;
 
 
@@ -45,19 +46,15 @@ SELECT *,
     COUNT(*)
 FROM viewership
 GROUP BY ALL
-HAVING COUNT(*) > 1; --(5 recodrs have duplicates)
-
-
+HAVING COUNT(*) > 1; --(5 records have duplicates)
 
 -- Query to create a temporary table with no duplicates as viewership_new
-
-SELECT DISTINCT *
-FROM viewership;
-
-CREATE OR REPLACE TEMPORARY TABLE viewership_new AS (
+WITH viewership_new AS (
     SELECT DISTINCT *
-    FROM viewership
-);
+    FROM viewership 
+    GROUP BY ALL)
+    SELECT *
+    FROM viewership;
 
 SELECT *, 
     COUNT(*)
@@ -76,13 +73,14 @@ SELECT * FROM user_profiles
 WHERE userid IS NULL OR NAME IS NULL OR surname IS NULL OR email IS NULL OR gender IS NULL OR RACE IS NULL OR AGE IS NULL OR PROVINCE IS NULL OR SOCIAL_MEDIA_HANDLE IS NULL;
 
 SELECT * FROM viewership_new
-WHERE userid IS NULL OR channel2 IS NULL OR recorddate2 IS NULL OR duration_2 IS NULL OR userid2 IS NULL OR local_timestamp IS NULL OR month IS NULL OR year IS NULL;
+WHERE user_id IS NULL OR channel_2 IS NULL OR record_date_2 IS NULL OR duration_2 IS NULL OR local_timestamp IS NULL OR month IS NULL OR year IS NULL;
 
 
 
 -- Query to replace missing records with 'None' and creating a temp table
 
-CREATE OR REPLACE TEMP TABLE user_profiles_new AS (
+CREATE OR REPLACE TEMP TABLE
+WITH user_profiles_new AS (
     SELECT 
         userid,
         age,
@@ -101,9 +99,8 @@ CREATE OR REPLACE TEMP TABLE user_profiles_new AS (
             ELSE 'Not Specified'
         END AS Age_group
     FROM user_profiles
-);
-
-
+    GROUP BY ALL)
+    SELECT * FROM user_profiles;
 
 -- Query to retrieve data on and display users who have watched something, including the channels watched and the time of day.
 
@@ -116,7 +113,7 @@ SELECT
     u.Race,
     u.Province,
     u.Age_group,
-    v.channel2,
+    v.channel_2,
     v.duration_2,
     CASE
         WHEN v.duration_2 between '00:00:00' AND '02:59:59' THEN '0 - 3 Hrs'
@@ -134,19 +131,20 @@ SELECT
     END AS Time_Type,
     v.month
 FROM user_profiles_new AS u
-INNER JOIN viewership_new AS v ON u.userid = v.userid;
+INNER JOIN viewership_new AS v ON u.userid = v.user_id;
 
 
 
--- Query to retrieve data on and display the users and viewership per channel
+-- Display the users and viewership per channel
 
 SELECT
-    v.channel2 AS Channel,
+    v.channel_2 AS Channel,
     COUNT(u.userid) AS user_count
 FROM user_profiles_new AS u
-INNER JOIN viewership_new AS v ON u.userid = v.userid
-GROUP BY v.channel2
+INNER JOIN viewership_new AS v ON u.userid = v.user_id
+GROUP BY v.channel_2
 ORDER BY user_count DESC;
+
 
 
 
@@ -156,7 +154,7 @@ SELECT
     u.province,
     COUNT(u.userid) AS user_count
 FROM user_profiles_new AS u
-INNER JOIN viewership_new AS v ON u.userid = v.userid
+INNER JOIN viewership_new AS v ON u.userid = v.user_id
 GROUP BY 1
 ORDER BY user_count DESC;
 
@@ -208,12 +206,11 @@ GROUP BY 1;
 
 -- Query to retrieve data on and display the average duration per channel
 
--- SELECT
---     v.channel2 AS channel,
---     AVG(v.duration_2)
--- FROM user_profiles_new AS u
--- INNER JOIN viewership_new AS v ON u.userid = v.userid
--- GROUP BY 1;
+SELECT
+channel_2 AS channel,
+    avg(duration_2) AS average_watch_duration
+FROM bright_tv_joined
+GROUP BY channel;
 
 
 
