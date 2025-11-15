@@ -39,5 +39,3 @@ This project takes a deep dive into the patterns and trends of BrightTV viewersh
  - 
 # Platform and Distribution Strategies​
 - Embrace a Hybrid Distribution Model: Offer content across various platforms, including traditional linear TV, subscription-based (SVOD), and ad-supported video on demand (AVOD) tiers, to maximize reach and revenue streams.​
-
-- 
